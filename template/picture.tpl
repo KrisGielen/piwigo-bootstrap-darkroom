@@ -337,28 +337,34 @@
 {/if}
 
 {if !empty($thumbnails)}
+{combine_css path="themes/bootstrap_lightroom/owlcarousel/assets/owl.carousel.min.css"}
+{combine_css path="themes/bootstrap_lightroom/owlcarousel/assets/owl.theme.default.min.css"}
+{combine_script id="owlcarousel" path="themes/bootstrap_lightroom/owlcarousel/owl.carousel.min.js"}
 {footer_script require='jquery'}{strip}
-$('.carousel[data-type="multi"] .item').each(function(){
-  var next = $(this).next();
-  if (!next.length) {
-    next = $(this).siblings(':first');
-  }
-  next.children(':first-child').clone().appendTo($(this));
-  
-  for (var i=0;i<4;i++) {
-    next=next.next();
-    if (!next.length) {
-    	next = $(this).siblings(':first');
-  	}
-    
-    next.children(':first-child').clone().appendTo($(this));
-  }
-});
+  $(".owl-carousel").owlCarousel({
+    center:false,
+    loop:false,
+    margin:10,
+    responsiveClass:true,
+    responsive:{
+        0:{
+            items:1,
+            nav:true
+        },
+        600:{
+            items:3,
+            nav:false
+        },
+        1000:{
+            items:6,
+            nav:true,
+        }
+    }
+  });
 {/strip}{/footer_script}
 <div class="container">
  <div class="col-lg-10 col-md-offset-1">
-  <div id="thumbnailCarousel" class="carousel slide" data-ride="carousel" data-type="multi" data-interval="false" data-wrap="false">
-    <div class="carousel-inner">
+  <div id="thumbnailCarousel" class="owl-carousel">
 {foreach from=$thumbnails item=thumbnail}
 {assign var=derivative value=$pwg->derivative($derivative_params, $thumbnail.src_image)}
 {if !$derivative->is_cached()}
@@ -366,19 +372,12 @@ $('.carousel[data-type="multi"] .item').each(function(){
 {combine_script id='thumbnails.loader' path='themes/default/js/thumbnails.loader.js' require='jquery.ajaxmanager' load='footer'}
 {/if}
 {if $thumbnail.id eq $current.id}
-      <div class="item active">
-        <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12 text-center"><a href="{$thumbnail.URL}"><img {if $derivative->is_cached()}src="{$derivative->get_url()}"{else}src="{$ROOT_URL}{$themeconf.icon_dir}/img_small.png" data-src="{$derivative->get_url()}"{/if} alt="{$thumbnail.TN_ALT}" title="{$thumbnail.TN_TITLE} class="img-responsive"></a></div>
-      </div>
+        <div class="owl-item active"><a href="{$thumbnail.URL}"><img {if $derivative->is_cached()}src="{$derivative->get_url()}"{else}src="{$ROOT_URL}{$themeconf.icon_dir}/img_small.png" data-src="{$derivative->get_url()}"{/if} alt="{$thumbnail.TN_ALT}" title="{$thumbnail.TN_TITLE} class="img-responsive"></a></div>
 {else}
-      <div class="item">
-        <div class="col-lg-2  col-md-4 col-sm-6 col-xs-12 text-center"><a href="{$thumbnail.URL}"><img {if $derivative->is_cached()}src="{$derivative->get_url()}"{else}src="{$ROOT_URL}{$themeconf.icon_dir}/img_small.png" data-src="{$derivative->get_url()}"{/if} alt="{$thumbnail.TN_ALT}" title="{$thumbnail.TN_TITLE} class="img-responsive"></a></div>
-      </div>
+        <div class="owl-item"><a href="{$thumbnail.URL}"><img {if $derivative->is_cached()}src="{$derivative->get_url()}"{else}src="{$ROOT_URL}{$themeconf.icon_dir}/img_small.png" data-src="{$derivative->get_url()}"{/if} alt="{$thumbnail.TN_ALT}" title="{$thumbnail.TN_TITLE} class="img-responsive"></a></div>
 {/if}
 {/foreach}
-    </div>
   </div>
-  <a class="left carousel-control" href="#thumbnailCarousel" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
-  <a class="right carousel-control" href="#thumbnailCarousel" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
  </div>
 </div>
 {/if}
