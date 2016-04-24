@@ -341,7 +341,9 @@
 {combine_css path="themes/bootstrap_lightroom/owlcarousel/assets/owl.theme.default.min.css"}
 {combine_script id="owlcarousel" path="themes/bootstrap_lightroom/owlcarousel/owl.carousel.min.js"}
 {footer_script require='jquery'}{strip}
-  $(".owl-carousel").owlCarousel({
+  var owl = $(".owl-carousel");
+
+  owl.owlCarousel({
     center:false,
     loop:false,
     margin:10,
@@ -361,6 +363,8 @@
         }
     }
   });
+  var owlNumber = owl.find('[class="current"]').index();
+  owl.trigger('to.owl.carousel', [owlNumber]);
 {/strip}{/footer_script}
 <div class="container">
  <div class="col-lg-10 col-md-offset-1">
@@ -372,9 +376,9 @@
 {combine_script id='thumbnails.loader' path='themes/default/js/thumbnails.loader.js' require='jquery.ajaxmanager' load='footer'}
 {/if}
 {if $thumbnail.id eq $current.id}
-        <div class="owl-item active"><a href="{$thumbnail.URL}"><img {if $derivative->is_cached()}src="{$derivative->get_url()}"{else}src="{$ROOT_URL}{$themeconf.icon_dir}/img_small.png" data-src="{$derivative->get_url()}"{/if} alt="{$thumbnail.TN_ALT}" title="{$thumbnail.TN_TITLE} class="img-responsive"></a></div>
+        <div class="current"><a href="{$thumbnail.URL}"><img {if $derivative->is_cached()}src="{$derivative->get_url()}"{else}src="{$ROOT_URL}{$themeconf.icon_dir}/img_small.png" data-src="{$derivative->get_url()}"{/if} alt="{$thumbnail.TN_ALT}" title="{$thumbnail.TN_TITLE} class="img-responsive"></a></div>
 {else}
-        <div class="owl-item"><a href="{$thumbnail.URL}"><img {if $derivative->is_cached()}src="{$derivative->get_url()}"{else}src="{$ROOT_URL}{$themeconf.icon_dir}/img_small.png" data-src="{$derivative->get_url()}"{/if} alt="{$thumbnail.TN_ALT}" title="{$thumbnail.TN_TITLE} class="img-responsive"></a></div>
+        <div><a href="{$thumbnail.URL}"><img {if $derivative->is_cached()}src="{$derivative->get_url()}"{else}src="{$ROOT_URL}{$themeconf.icon_dir}/img_small.png" data-src="{$derivative->get_url()}"{/if} alt="{$thumbnail.TN_ALT}" title="{$thumbnail.TN_TITLE} class="img-responsive"></a></div>
 {/if}
 {/foreach}
   </div>
