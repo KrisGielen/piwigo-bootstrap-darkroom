@@ -258,7 +258,7 @@
 {if $display_info.rating_score and isset($rate_summary)}
         <div id="rating" class="col-lg-4 col-md-6">
             <dl class="dl-horizontal">
-                <dt>{'Rating score'|@translate} <span id="ratingCount">({if $rate_summary.count}{$rate_summary.count|@translate_dec:'%d rate':'%d rates'}){else}{'no rate'|@translate}{/if})</span></dt>
+                <dt>{'Rating score'|@translate} <span id="ratingCount">({if $rate_summary.count}{$rate_summary.count|@translate_dec:'%d rate':'%d rates'}{else}{'no rate'|@translate}{/if})</span></dt>
                 <dd id="averageRate">
 {foreach from=$rating.marks item=mark name=rate_loop}
                     <span class="{if $rate_summary.count && $rate_summary.average > $mark - 0.5}rateButtonStarFull{else}rateButtonStarEmpty{/if}" data-value="{$mark}"></span>
@@ -337,9 +337,9 @@
 {/if}
 
 {if !empty($thumbnails)}
-{combine_css path="themes/bootstrap_lightroom/owlcarousel/assets/owl.carousel.min.css"}
-{combine_css path="themes/bootstrap_lightroom/owlcarousel/assets/owl.theme.default.min.css"}
-{combine_script id="owlcarousel" path="themes/bootstrap_lightroom/owlcarousel/owl.carousel.min.js"}
+{combine_css path="themes/bootstrap_darkroom/owlcarousel/assets/owl.carousel.min.css"}
+{combine_css path="themes/bootstrap_darkroom/owlcarousel/assets/owl.theme.default.min.css"}
+{combine_script id="owlcarousel" path="themes/bootstrap_darkroom/owlcarousel/owl.carousel.min.js"}
 {footer_script require='jquery'}{strip}
   var owl = $(".owl-carousel");
 
@@ -363,7 +363,8 @@
         }
     }
   });
-  var owlNumber = owl.find('[class="current"]').index();
+  var owlNumber = owl.find('[data-thumbnail-active="1"]').index();
+  console.log ('owlNumber is: ' + owlNumber);
   owl.trigger('to.owl.carousel', [owlNumber]);
 {/strip}{/footer_script}
 <div class="container">
@@ -376,9 +377,9 @@
 {combine_script id='thumbnails.loader' path='themes/default/js/thumbnails.loader.js' require='jquery.ajaxmanager' load='footer'}
 {/if}
 {if $thumbnail.id eq $current.id}
-        <div class="current"><a href="{$thumbnail.URL}"><img {if $derivative->is_cached()}src="{$derivative->get_url()}"{else}src="{$ROOT_URL}{$themeconf.icon_dir}/img_small.png" data-src="{$derivative->get_url()}"{/if} alt="{$thumbnail.TN_ALT}" title="{$thumbnail.TN_TITLE} class="img-responsive"></a></div>
+        <div data-thumbnail-active="1"><a href="{$thumbnail.URL}"><img {if $derivative->is_cached()}src="{$derivative->get_url()}"{else}src="{$ROOT_URL}{$themeconf.icon_dir}/img_small.png" data-src="{$derivative->get_url()}"{/if} alt="{$thumbnail.TN_ALT}" title="{$thumbnail.TN_TITLE}" class="img-responsive"></a></div>
 {else}
-        <div><a href="{$thumbnail.URL}"><img {if $derivative->is_cached()}src="{$derivative->get_url()}"{else}src="{$ROOT_URL}{$themeconf.icon_dir}/img_small.png" data-src="{$derivative->get_url()}"{/if} alt="{$thumbnail.TN_ALT}" title="{$thumbnail.TN_TITLE} class="img-responsive"></a></div>
+        <div><a href="{$thumbnail.URL}"><img {if $derivative->is_cached()}src="{$derivative->get_url()}"{else}src="{$ROOT_URL}{$themeconf.icon_dir}/img_small.png" data-src="{$derivative->get_url()}"{/if} alt="{$thumbnail.TN_ALT}" title="{$thumbnail.TN_TITLE}" class="img-responsive"></a></div>
 {/if}
 {/foreach}
   </div>
