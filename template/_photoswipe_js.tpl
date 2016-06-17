@@ -2,7 +2,8 @@
 {combine_css path="themes/bootstrap_darkroom/photoswipe/default-skin/default-skin.css" order=-12}
 {combine_script id="photoswipe" require="jquery" path="themes/bootstrap_darkroom/photoswipe/photoswipe.min.js"}
 {combine_script id="photoswipe.ui" require="photoswipe" path="themes/bootstrap_darkroom/photoswipe/photoswipe-ui-default.min.js"}
-{footer_script require='jquery' require="photoswipe.ui"}{strip}
+{combine_script id="exif.js" path="themes/bootstrap_darkroom/js/exif.js"}
+{footer_script require='jquery' require="photoswipe.ui" require="exif.js"}{strip}
 var selector = '{$selector}';
 
 function startPhotoSwipe(idx) {
@@ -50,7 +51,7 @@ function startPhotoSwipe(idx) {
                          $width_medium  = $size_medium[0],
                          $height_medium = $size_medium[1],
                          $href          = $(this).attr('href'),
-                         $title          = '<a href="' + $href + '"><div>' + $(this).data('name') + '<ul><li>' + $(this).data('description') + '</li></ul></div></a>';
+                         $title         = '<a href="' + $href + '"><div>' + $(this).data('name') + '<ul><li>' + $(this).data('description') + '</li></ul></div></a>';
                      var item = {
                          is_video: false,
                          href: $href,
@@ -187,7 +188,6 @@ function startPhotoSwipe(idx) {
         });
 
         photoSwipe.init();
-
         detectVideo(photoSwipe);
 
         photoSwipe.listen('initialZoomInEnd', function() {
@@ -205,6 +205,8 @@ function startPhotoSwipe(idx) {
             $('.pswp__button--details').off().on('click touchstart', function() {
                 location.href = photoSwipe.currItem.href
             });
+            $('.pswp__img[src="' + photoSwipe.currItem.src + '"]').attr('id', 'pswp-active-img');
+            getExif();
         });
 
         photoSwipe.listen('beforeChange', function() {
@@ -224,6 +226,16 @@ function startPhotoSwipe(idx) {
            removeVideo();
         });
     });
+
+    function getExif() {
+        var _img = document.getElementById('pswp-active-img');
+        console.log(_img);
+        EXIF.getData(_img, function() {
+            var _make = EXIF.getTag(this, "Make");
+            console.log(_make);
+        });
+        $(_img).removeAttr('id');
+    }
 
     function removeVideo() {
         if ($('.pswp-video-modal').length > 0) { 
