@@ -7,7 +7,7 @@
 {/if}
 {if !empty($PLUGIN_INDEX_CONTENT_BEFORE)}{$PLUGIN_INDEX_CONTENT_BEFORE}{/if}
 
-{footer_script require='jquery'}
+{footer_script require='jquery'}{strip}
 if ($('.jumbotron').length > 0) {
     var $affix_height = $('.navbar-main').height() + $('.jumbotron').outerHeight();
     $('.navbar-contextual').affix({literal}{ offset: {top: $affix_height } }{/literal});
@@ -52,7 +52,7 @@ $('.navbar-contextual').on('affix-top.bs.affix', function() {
     }
     $('.navmenu').css('top', nav_top_offset);
 });
-{/footer_script}
+{strip}{/footer_script}
 <div id="navmenu-contextual" class="navmenu navmenu-default navmenu-fixed-right offcanvas" role="navigation">
     <ul class="nav navmenu-nav"></ul>
 </div>
@@ -73,19 +73,19 @@ $('.navbar-contextual').on('affix-top.bs.affix', function() {
                 {$TITLE}
 {footer_script require='jquery'}{strip}
 $(document).ready(function() {
-if (!navigator.userAgent.match(/rv:11/)) {
- var $nrLevels = $('.navbar-contextual .navbar-brand a').length,
-     $html;
- while ($nrLevels > 2) {
-   $('.navbar-contextual .navbar-brand a')[0].remove();
-   $nrLevels = $('.navbar-contextual .navbar-brand a').length;
-   $html = $('.navbar-contextual .navbar-brand').html().replace(/^ \/ /, "");
-   if ($nrLevels === 2) {
-      $('.navbar-contextual .navbar-brand').html('<a href="{$U_HOME}" title="{'Home'|@translate}"><span class="glyphicon glyphicon-home"></span><span class="glyphicon-text">{'Home'|@translate}</span></a>' + $html);
-   } else {
-      $('.navbar-contextual .navbar-brand').html($html);
-   }
- }
+  if (!navigator.userAgent.match(/rv:11/)) {
+    var $nrLevels = $('.navbar-contextual .navbar-brand a').length,
+        $html;
+    while ($nrLevels > 2) {
+      $('.navbar-contextual .navbar-brand a')[0].remove();
+      $nrLevels = $('.navbar-contextual .navbar-brand a').length;
+      $html = $('.navbar-contextual .navbar-brand').html().replace(/^ \/ /, "");
+      if ($nrLevels === 2) {
+        $('.navbar-contextual .navbar-brand').html('<a href="{$U_HOME}" title="{'Home'|@translate}"><span class="glyphicon glyphicon-home"></span><span class="glyphicon-text">{'Home'|@translate}</span></a>{$LEVEL_SEPARATOR}' + $html);
+      } else {
+        $('.navbar-contextual .navbar-brand').html($html);
+    }
+  }
 }
 {if $theme_config_extra->bootstrap_theme == 'bootswatch'}
    $('.navbar-default .navbar-brand a').css('color', $('.navbar-default .navbar-brand').css('color'));
@@ -245,7 +245,7 @@ if (!navigator.userAgent.match(/rv:11/)) {
 {if !empty($CATEGORIES)}
     <!-- Start of categories -->
 {$CATEGORIES}
-{footer_script}{strip}{literal}
+{footer_script}{strip}
 $(document).ready(function() {
   $('#content img').load(function(){
     $('#content .col-inner').equalHeights()
@@ -262,7 +262,7 @@ $(window).on('resize', function() {
     }
   }, 250);
 });
-{/literal}{/strip}{/footer_script}
+{/strip}{/footer_script}
     <!-- End of categories -->
 {/if}
 
